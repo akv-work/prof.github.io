@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research, Build & Break — AI E-commerce Lab</title>
+<style>
+:root{
+  --ink:#17243a;--muted:#627087;--paper:#f4f7fb;--white:#fff;--line:#dbe3ef;
+  --blue:#1769aa;--blue-pale:#e8f3ff;--green:#18794e;--green-pale:#e8f7ef;
+  --purple:#7041b8;--purple-pale:#f0eaff;--orange:#a85b00;--orange-pale:#fff2df;
+  --red:#b42318;--red-pale:#ffebe9;--navy:#14243a;--shadow:0 12px 32px rgba(20,36,58,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(20,36,58,.96);color:#fff;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;backdrop-filter:blur(12px)}
+.brand{font-weight:850;letter-spacing:.08em;font-size:.82rem}.brand span{color:#91c8ff}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid #ffffff38;background:#ffffff12;color:white;border-radius:10px;padding:8px 12px;font-weight:700;font-size:.82rem}
+.btn:hover{background:#ffffff25}
+.hero{background:radial-gradient(circle at 85% 15%,#31537b 0,transparent 30%),linear-gradient(125deg,#14243a,#1d3655);color:#fff;padding:64px max(24px,calc((100vw - 1180px)/2)) 56px}
+.eyebrow{font-size:.75rem;font-weight:850;letter-spacing:.16em;text-transform:uppercase;color:#91c8ff}
+h1{font-size:clamp(2.5rem,6vw,5.4rem);line-height:.98;letter-spacing:-.055em;margin:16px 0 20px;max-width:850px}
+.hero p{max-width:760px;color:#d4deeb;font-size:1.1rem}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.pill{border:1px solid #ffffff35;background:#ffffff0d;border-radius:999px;padding:7px 12px;font-size:.82rem}
+.layout{max-width:1180px;margin:auto;padding:28px 20px 80px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px}
+nav{position:sticky;top:76px;align-self:start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+nav .navtitle{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:850;padding:6px 9px 10px}
+nav a{display:block;text-decoration:none;padding:9px 10px;border-radius:9px;font-size:.88rem;font-weight:650;color:#34445b}
+nav a:hover{background:var(--blue-pale);color:var(--blue)}
+main{min-width:0}
+.section{margin-bottom:46px;scroll-margin-top:92px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:17px}
+.kicker{color:var(--blue);font-size:.73rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+h2{font-size:clamp(1.7rem,3vw,2.5rem);line-height:1.08;letter-spacing:-.035em;margin:5px 0}
+h3{font-size:1.1rem;line-height:1.25;margin:0 0 8px}
+.sub{color:var(--muted);margin:5px 0 0}
+.card{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);min-width:0}
+.grid{display:grid;gap:15px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.banner{border-radius:16px;padding:23px;background:var(--navy);color:#fff;margin-bottom:16px}
+.banner p{color:#d3ddeb;margin-bottom:0}.banner .tag{color:#91c8ff}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+.strategy{border-top:5px solid var(--blue);display:flex;flex-direction:column;gap:12px}
+.strategy.deep{border-top-color:var(--purple)}.strategy.scale{border-top-color:var(--green)}
+.strategy .question{margin-top:auto;border-radius:11px;padding:12px;background:var(--blue-pale);font-weight:750;color:#174f83}
+.strategy.deep .question{background:var(--purple-pale);color:var(--purple)}.strategy.scale .question{background:var(--green-pale);color:var(--green)}
+ul.clean{list-style:none;padding:0;margin:8px 0 0}
+ul.clean li{position:relative;padding:0 0 8px 20px;color:#34445b}
+ul.clean li:before{content:"";position:absolute;left:1px;top:.58em;width:7px;height:7px;border-radius:2px;background:#8ea4bf}
+.tech{border-left:4px solid var(--blue)}.tech.ml{border-color:var(--green)}.tech.agent{border-color:var(--purple)}.tech.ops{border-color:var(--orange)}
+.tech p{margin:7px 0;color:#34445b}.trade{margin-top:12px;padding:10px 12px;background:#f3f6fa;border-radius:10px;font-size:.88rem}
+.trade b{display:block;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.role{font-size:.75rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.phase{display:grid;grid-template-columns:100px minmax(0,1fr);gap:18px;padding:17px 0;border-bottom:1px solid var(--line)}
+.phase:last-child{border-bottom:0}.time{font-weight:900;color:var(--blue);font-size:.9rem}.phase p{margin:5px 0;color:#526174}
+.phase .materials{font-size:.82rem;color:var(--muted)}
+.prompt{background:#f7f9fc;border:1px dashed #b8c6d9;border-radius:11px;padding:12px;margin-top:8px}
+.prompt label{display:block;font-weight:800;font-size:.82rem;margin-bottom:5px}
+input[type=text],textarea,select{width:100%;border:1px solid #cbd6e4;border-radius:9px;padding:10px 11px;font:inherit;background:white;color:var(--ink)}
+textarea{min-height:74px;resize:vertical}
+.arch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.arch{min-height:300px;border-top:5px solid var(--blue)}.arch:nth-child(2){border-top-color:var(--green)}.arch:nth-child(3){border-top-color:var(--purple)}.arch:nth-child(4){border-top-color:var(--orange)}
+.arch textarea{margin:5px 0 10px;min-height:65px}
+.flow{display:flex;align-items:stretch;justify-content:center;gap:9px;flex-wrap:wrap;margin:18px 0}
+.flowbox{padding:14px 16px;border-radius:12px;background:var(--blue-pale);color:#174f83;font-weight:800;text-align:center;flex:1;min-width:120px}
+.arrow{align-self:center;color:#7d8ba0;font-size:1.5rem;font-weight:900}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.metric label{font-size:.8rem;font-weight:800;display:block;margin-bottom:5px}
+.incident{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.incident-head{padding:15px 18px;color:#fff;background:var(--green)}
+.incident.b .incident-head{background:var(--orange)}.incident.c .incident-head{background:var(--red)}
+.incident-body{padding:18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.incident-body p{margin:0;color:#46556a}
+.incident .challenge{background:#f5f7fa;border-radius:10px;padding:12px;font-size:.9rem}
+.incident .challenge ol{margin:6px 0 0;padding-left:20px}
+.incident textarea{min-height:100px;margin-top:auto}
+.incident-foot{padding:0 18px 18px;font-size:.76rem;color:var(--muted);font-weight:800}
+.number{font-size:.7rem;font-weight:900;letter-spacing:.12em;opacity:.88}
+.deck-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px;flex-wrap:wrap}
+.deck-tools button{border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);padding:8px 11px;font-weight:750}
+.deck-tools button:hover{border-color:var(--blue);color:var(--blue)}
+.pitch-step{display:flex;gap:13px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.pitch-step:last-child{border-bottom:0}
+.bignum{flex:0 0 34px;height:34px;border-radius:10px;background:var(--blue-pale);color:var(--blue);display:grid;place-items:center;font-weight:900}
+.question-list{counter-reset:q;list-style:none;padding:0}
+.question-list li{counter-increment:q;display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.question-list li:before{content:counter(q,decimal-leading-zero);font-weight:900;color:var(--purple);font-size:.8rem;padding-top:3px}
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line)}
+.checklist input{margin-top:5px;accent-color:var(--blue)}
+.small{font-size:.82rem;color:var(--muted)}
+.footer{background:var(--navy);color:#d6dfeb;padding:25px max(24px,calc((100vw - 1180px)/2));font-size:.82rem}
+@media(max-width:900px){.layout{grid-template-columns:1fr}nav{position:static;display:flex;overflow:auto;gap:3px;align-items:center}nav .navtitle{display:none}nav a{white-space:nowrap}.grid.three{grid-template-columns:1fr}.grid.two,.arch-grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}.hero{padding-top:44px}}
+@media(max-width:560px){.topbar{align-items:flex-start;flex-direction:column}.phase{grid-template-columns:1fr;gap:3px}.card{padding:17px}.hero{padding-left:20px;padding-right:20px}.layout{padding-left:13px;padding-right:13px}}
+@media print{
+  body{background:#fff;font-size:10pt}.topbar,nav,.top-actions,.deck-tools{display:none!important}
+  .hero{padding:20px;background:#14243a!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .layout{display:block;max-width:none;padding:15px}.section{break-before:page;margin-bottom:20px}
+  #case,#strategies{break-before:auto}.card{box-shadow:none;break-inside:avoid}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid.two,.arch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.incident{break-inside:avoid}
+  textarea,input,select{border:1px solid #aab6c5}.footer{background:#fff;color:#333;padding:15px}
+  a{text-decoration:none}.section-head{margin-bottom:10px}
+}
+
+.team-basic{border-top:5px solid var(--blue)}.team-smart{border-top:5px solid var(--green)}.team-ai{border-top:5px solid var(--purple)}
+.example{background:#f7f9fc;border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem}
+.pipeline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:13px 0}.pipeline span{padding:9px 12px;border-radius:10px;background:var(--blue-pale);font-weight:800}.pipeline b{color:#7d8ba0}
+.quiz li{margin-bottom:7px}.big-question{font-size:1.12rem;font-weight:850;color:var(--navy)}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="brand">AI LAB <span>/</span> LANGUAGE & SPEECH</div><div class="top-actions"><button class="btn" onclick="window.print()">⎙ Печать / PDF</button><button class="btn" onclick="resetFields()">Сбросить поля</button></div></header>
+<section class="hero">
+  <div class="eyebrow">90-minute school AI workshop</div>
+  <h1>Hear.<br>Understand.<br><span style="color:#91c8ff">Answer.</span></h1>
+  <p>Спроектируйте голосового AI-помощника для школьника. Разберитесь, как компьютер превращает речь в текст, слова — в числа, а текст — в осмысленный ответ.</p>
+  <div class="hero-meta"><span class="pill">⏱ 90 минут</span><span class="pill">👥 3 команды</span><span class="pill">🎙 ASR + NLP + Embeddings + LLM</span><span class="pill">💥 Stress-test</span></div>
+</section>
+<div class="layout">
+<nav aria-label="Навигация"><div class="navtitle">Материалы занятия</div><a href="#case">01 · Кейс</a><a href="#teams">02 · Три команды</a><a href="#cheatsheet">03 · Шпаргалка</a><a href="#research">04 · Вопросы</a><a href="#build">05 · Соберите pipeline</a><a href="#incidents">06 · Поломки</a><a href="#pitch">07 · Защита</a><a href="#debrief">08 · Рефлексия</a></nav>
+<main>
+<section class="section" id="case"><div class="section-head"><div><div class="kicker">01 / Brief</div><h2>Голосовой AI-помощник для школьника</h2><p class="sub">Один кейс для всех команд · 0–10 минут</p></div></div>
+<div class="banner"><div class="tag">User challenge</div><h2 style="color:white;margin-top:9px">«Напомни завтра сдать homework по биологии и объясни фотосинтез простыми словами»</h2><p>Помощник должен услышать смешанную русско-английскую речь, получить текст, понять запрос и сформировать полезный ответ.</p></div>
+<div class="card"><h3>Разложите задачу</h3><div class="flow"><div class="flowbox">🎙 Audio</div><div class="arrow">→</div><div class="flowbox">ASR</div><div class="arrow">→</div><div class="flowbox">Text</div><div class="arrow">→</div><div class="flowbox">NLP / LLM</div><div class="arrow">→</div><div class="flowbox">Answer</div></div><div class="grid three"><div class="prompt"><label>Что должен понять помощник?</label><textarea placeholder="Цель пользователя, предмет, срок..."></textarea></div><div class="prompt"><label>Где возможна ошибка?</label><textarea placeholder="Речь, слово, смысл, ответ..."></textarea></div><div class="prompt"><label>Что считать хорошим ответом?</label><textarea placeholder="Критерии качества..."></textarea></div></div></div></section>
+
+<section class="section" id="teams"><div class="section-head"><div><div class="kicker">02 / Choose your approach</div><h2>Три команды</h2><p class="sub">Все решают одну задачу, но разными технологиями.</p></div></div><div class="grid three">
+<article class="card team-basic"><div class="tag" style="color:var(--blue)">TEAM 1 · BASIC</div><h3>Слова и частоты</h3><p class="small">Сделайте максимально простую и объяснимую систему.</p><div class="pipeline"><span>ASR</span><b>→</b><span>Tokens</span><b>→</b><span>TF-IDF</span><b>→</b><span>Search</span></div><ul class="clean"><li>Токенизация</li><li>Лемматизация / стемминг</li><li>Bag-of-Words</li><li>TF-IDF</li></ul><div class="question">Главный вопрос: насколько далеко можно зайти, просто считая слова?</div></article>
+<article class="card team-smart"><div class="tag" style="color:var(--green)">TEAM 2 · SMART</div><h3>Карта смыслов</h3><p class="small">Научите систему замечать смысловую близость.</p><div class="pipeline"><span>ASR</span><b>→</b><span>Text</span><b>→</b><span>Embeddings</span><b>→</b><span>Similarity</span></div><ul class="clean"><li>Эмбеддинги</li><li>Word2Vec</li><li>Векторное представление</li><li>Смысловая близость</li></ul><div class="question" style="background:var(--green-pale);color:var(--green)">Главный вопрос: как превратить смысл слова в числа?</div></article>
+<article class="card team-ai"><div class="tag" style="color:var(--purple)">TEAM 3 · AI</div><h3>Речь, контекст и LLM</h3><p class="small">Спроектируйте современного голосового ассистента.</p><div class="pipeline"><span>Audio</span><b>→</b><span>ASR</span><b>→</b><span>LLM</span><b>→</b><span>Answer</span></div><ul class="clean"><li>Распознавание речи</li><li>Language Code-Switching</li><li>Контекст</li><li>Большие языковые модели</li></ul><div class="question" style="background:var(--purple-pale);color:var(--purple)">Главный вопрос: что меняется, когда система работает не со словами, а с контекстом?</div></article>
+</div></section>
+
+<section class="section" id="cheatsheet"><div class="section-head"><div><div class="kicker">03 / Concepts</div><h2>Технологическая шпаргалка</h2><p class="sub">Здесь есть ровно те подсказки, которые нужны для заданий ниже. Ответы всё равно придётся собрать самим. Какая досада.</p></div></div><div class="grid two">
+<article class="card tech"><h3>Токенизация</h3><p>Компьютер не работает с предложением как с одной неделимой мыслью. Сначала текст делят на <b>токены</b>: это могут быть слова, знаки препинания или части слов. После этого каждый токен можно считать, сравнивать или превращать в числа.</p><div class="example">«Я изучаю AI» → [«Я», «изучаю», «AI»]</div><div class="trade"><b>Зачем это нужно</b>Токенизация обычно становится первым шагом обработки текста перед BoW, TF-IDF, embeddings и языковыми моделями.</div></article>
+<article class="card tech"><h3>Лемматизация и стемминг</h3><p>Оба подхода уменьшают различия между формами одного слова. <b>Лемматизация</b> старается вернуть словарную форму с учётом языка: «учился» → «учиться». <b>Стемминг</b> действует грубее: отрезает окончания и суффиксы и может получить основу, которая сама не является словом.</p><div class="example">учусь / учился / учиться → лемма «учиться»</div><div class="trade"><b>Компромисс</b>Это помогает системам, которые сравнивают слова буквально, но иногда форма слова сама несёт полезный смысл и её потеря нежелательна.</div></article>
+<article class="card tech"><h3>Bag-of-Words · BoW</h3><p>Сначала создаётся словарь известных слов, затем каждый текст превращается в вектор: для каждого слова записывается, сколько раз оно встретилось. Поэтому тексты с большим количеством общих слов выглядят похожими.</p><div class="example">Словарь [кот, любит, рыбу] · «кот любит рыбу» → [1, 1, 1]</div><div class="trade"><b>Что теряется</b>BoW почти не учитывает порядок и значение слов. «кот любит собаку» и «собака любит кота» могут выглядеть очень похоже. Синонимы вроде «тест» и «контрольная» считаются разными словами, если мы специально их не связали.</div></article>
+<article class="card tech"><h3>TF-IDF</h3><p>TF-IDF тоже представляет текст числами, но учитывает не только количество слова. <b>TF</b> показывает, насколько часто слово встречается в конкретном документе. <b>IDF</b> уменьшает вес слов, которые встречаются почти во всех документах. В итоге редкое характерное слово обычно важнее частого общего.</p><div class="example">В школьных текстах «урок» может встречаться везде, а «фотосинтез» — только в материалах по биологии. TF-IDF даст «фотосинтезу» больший вес.</div><div class="trade"><b>Сильная сторона и предел</b>Хорош для поиска по ключевым словам и прост в объяснении, но сам по себе не знает, что разные слова могут иметь близкий смысл.</div></article>
+<article class="card tech ml"><h3>Embeddings</h3><p><b>Embedding</b> — это вектор чисел, который модель использует как представление объекта: слова, фразы или текста. Эти числа не являются обычными «оценками смысла» по отдельности. Важнее положение всего вектора: если модель научилась хорошо, объекты с похожим употреблением или смыслом могут располагаться ближе.</p><div class="example">«школьник» и «ученик» могут иметь более близкие векторы, чем «школьник» и «телефон».</div><div class="trade"><b>Как использовать</b>Можно измерять расстояние или cosine similarity между векторами. Чем выше сходство, тем более похожими система считает представления. Это позволяет находить похожие фразы даже без полного совпадения слов.</div></article>
+<article class="card tech ml"><h3>Word2Vec</h3><p>Word2Vec обучает <b>вектор для каждого слова</b>, наблюдая за его окружением в большом количестве текстов. Идея проста: слова, которые встречаются в похожих контекстах, должны получить похожие векторы. Поэтому модель может уловить некоторые смысловые и языковые связи, которых нет у BoW.</p><div class="example">Если «ученик» и «школьник» часто встречаются рядом с похожими словами, их представления могут сблизиться.</div><div class="trade"><b>Ограничения</b>Классический Word2Vec хранит готовые векторы слов из своего словаря. Новое или неизвестное слово может не иметь вектора. Кроме того, один и тот же вектор слова обычно не меняется в зависимости от конкретного предложения. Смешение языков сработает только настолько хорошо, насколько такие языки представлены и согласованы в используемых embeddings.</div></article>
+<article class="card tech agent"><h3>ASR · Automatic Speech Recognition</h3><p>ASR преобразует <b>аудиосигнал речи в последовательность текста</b>. Современная модель анализирует акустические признаки записи и с помощью выученных закономерностей языка выбирает наиболее вероятные слова или токены. Шум, произношение, редкие термины и похожее звучание увеличивают риск ошибки.</p><div class="example">Audio: «Объясни Python lists» → ASR → Text: «Объясни Python lists»</div><div class="trade"><b>Почему ошибка важна</b>Текст ASR становится входом следующего этапа. Если «lists» превратилось в «leaves», NLP или LLM может совершенно правильно обработать уже неправильный текст. Поэтому особенно опасны ошибки в ключевых словах; низкая уверенность может быть поводом переспросить пользователя.</div></article>
+<article class="card tech agent"><h3>Language Code-Switching</h3><p><b>Code-switching</b> — переключение между языками в одном разговоре или предложении: «Мне завтра сдавать biology exam». Для ASR это сложнее, потому что системе приходится распознавать звуки, слова и правила сразу нескольких языков и понимать, где произошло переключение.</p><div class="example">«Объясни мне Python lists на русском» содержит русский и английский в одном запросе.</div><div class="trade"><b>Что требуется от системы</b>ASR должен сохранить иностранные слова достаточно точно, а следующий этап должен уметь обработать получившийся многоязычный текст. Само смешение языков не обязательно является ошибкой и не всегда требует «исправления».</div></article>
+<article class="card tech agent"><h3>LLM · Large Language Model</h3><p>LLM получает последовательность токенов и использует <b>контекст всей доступной последовательности</b>, чтобы предсказывать продолжение и выполнять текстовые задачи: объяснять, классифицировать, переформулировать и отвечать на вопросы. В отличие от классического Word2Vec, представление слова внутри современной LLM зависит от окружающего контекста.</p><div class="example">Слово «лист» в «лист бумаги» и «лист дерева» окружено разными словами, поэтому контекст помогает различить значения.</div><div class="trade"><b>Важно</b>LLM сложнее и гибче TF-IDF или Word2Vec, но это не гарантирует правильность. Она может уверенно сгенерировать неверный ответ даже при идеально распознанной речи. Для простого поиска по известным документам TF-IDF может быть достаточнее, дешевле и понятнее.</div></article>
+<article class="card tech ops"><h3>Как сравнивать подходы</h3><p>Смотрите не на название технологии, а на то, <b>какую проблему она решает</b>. BoW и TF-IDF хорошо используют совпадения слов; embeddings помогают находить смысловую близость; LLM использует контекст и умеет генерировать ответ; ASR решает отдельную задачу — превращает звук в текст.</p><div class="example">«Как готовиться к тесту?» ↔ «Как подготовиться к контрольной?» — буквальное совпадение слабее, чем смысловое. Embeddings или контекстная модель имеют преимущество.</div><div class="trade"><b>Проверка системы</b>Оценивайте этапы отдельно: правильно ли ASR распознал ключевые слова, нашла ли текстовая модель действительно похожий запрос, фактически ли верен финальный ответ. Ошибка раннего этапа передаётся дальше.</div></article>
+</div></section>
+
+<section class="section" id="research"><div class="section-head"><div><div class="kicker">04 / Research Sprint</div><h2>Вопросы команд</h2><p class="sub">15–20 минут на обсуждение и подготовку объяснения для остальных.</p></div></div><div class="grid three">
+<div class="card"><div class="tag" style="color:var(--blue)">BASIC</div><ol class="quiz"><li>Что делает ASR?</li><li>Зачем текст разбивать на токены?</li><li>Чем лемматизация отличается от стемминга?</li><li>Как Bag-of-Words превращает текст в числа?</li><li>Зачем нужен TF-IDF?</li><li>Какие две фразы система сочтёт похожими?</li><li>Что она потеряет, если смотрит только на слова?</li></ol><div class="prompt"><label>Объясните ваш подход одним предложением</label><textarea></textarea></div></div>
+<div class="card"><div class="tag" style="color:var(--green)">SMART</div><ol class="quiz"><li>Почему BoW плохо понимает смысл?</li><li>Что такое embedding?</li><li>Почему слово можно представить числами?</li><li>Что значит «векторы близки»?</li><li>Как Word2Vec использует контекст?</li><li>Где embeddings полезнее TF-IDF?</li><li>Что произойдёт с «bio exam»?</li></ol><div class="prompt"><label>Объясните ваш подход одним предложением</label><textarea></textarea></div></div>
+<div class="card"><div class="tag" style="color:var(--purple)">AI</div><ol class="quiz"><li>Как звук превращается в текст?</li><li>Что такое code-switching?</li><li>Почему «biology» внутри русской фразы сложно для ASR?</li><li>Что получает LLM после ASR?</li><li>Чем LLM отличается от Word2Vec?</li><li>Что будет, если ASR ошибётся?</li><li>Может ли LLM ошибиться при идеальном ASR?</li></ol><div class="prompt"><label>Объясните ваш подход одним предложением</label><textarea></textarea></div></div>
+</div></section>
+
+<section class="section" id="build"><div class="section-head"><div><div class="kicker">05 / Build</div><h2>Соберите свой pipeline</h2><p class="sub">Не перечисляйте технологии. Покажите, что происходит с запросом шаг за шагом.</p></div></div><div class="card"><div class="grid two"><div class="prompt"><label>1. Вход</label><textarea placeholder="Что получает система?"></textarea></div><div class="prompt"><label>2. Распознавание</label><textarea placeholder="Как получаем текст? Где возможны ошибки?"></textarea></div><div class="prompt"><label>3. Представление текста</label><textarea placeholder="BoW / TF-IDF / embeddings / tokens..."></textarea></div><div class="prompt"><label>4. Понимание / поиск</label><textarea placeholder="Как выбирается смысл или подходящий ответ?"></textarea></div><div class="prompt"><label>5. Ответ</label><textarea placeholder="Что увидит пользователь?"></textarea></div><div class="prompt"><label>6. Проверка</label><textarea placeholder="Как поймём, что система сработала хорошо?"></textarea></div></div><div class="prompt"><label>Нарисуйте финальную цепочку стрелками</label><textarea placeholder="Audio → ... → ... → Answer"></textarea></div></div></section>
+
+<section class="section" id="incidents"><div class="section-head"><div><div class="kicker">06 / Break it</div><h2>Карточки-поломки</h2><p class="sub">Выберите случайную карточку. Команда должна изменить решение, а не просто драматично признать существование проблемы.</p></div></div><div class="deck-tools"><div class="small">Stress-test</div><button onclick="randomIncident()">🎲 Случайная карточка</button></div><div class="grid two" id="incidentGrid">
+<article class="card incident a"><div class="incident-head"><div class="number">INCIDENT 01 · ASR</div><h3>Ключевое слово распознано неверно</h3></div><div class="incident-body"><p><b>Событие.</b> «Объясни Python lists» превратилось в «Объясни Python leaves».</p><div class="challenge">Как обнаружить проблему? Насколько изменится ответ?</div><textarea placeholder="Что меняем в системе?"></textarea></div></article>
+<article class="card incident b"><div class="incident-head"><div class="number">INCIDENT 02 · CODE-SWITCHING</div><h3>Пользователь сменил язык</h3></div><div class="incident-body"><p><b>Событие.</b> «Мне завтра сдавать biology exam, помоги подготовиться».</p><div class="challenge">Какая часть pipeline должна уметь работать с двумя языками?</div><textarea></textarea></div></article>
+<article class="card incident b"><div class="incident-head"><div class="number">INCIDENT 03 · VOCABULARY</div><h3>Появилось незнакомое слово</h3></div><div class="incident-body"><p><b>Событие.</b> Пользователь использует новое название игры, приложения или сленг.</p><div class="challenge">Что произойдёт у BoW, Word2Vec и LLM?</div><textarea></textarea></div></article>
+<article class="card incident c"><div class="incident-head"><div class="number">INCIDENT 04 · MEANING</div><h3>Разные слова, один смысл</h3></div><div class="incident-body"><p><b>Событие.</b> «Как готовиться к тесту?» и «Как подготовиться к контрольной?»</p><div class="challenge">Какая из трёх систем лучше заметит сходство и почему?</div><textarea></textarea></div></article>
+<article class="card incident c"><div class="incident-head"><div class="number">INCIDENT 05 · LLM</div><h3>Уверенный неправильный ответ</h3></div><div class="incident-body"><p><b>Событие.</b> Речь распознана правильно, но модель дала неверное объяснение.</p><div class="challenge">Почему хороший ASR ещё не означает хороший ответ?</div><textarea></textarea></div></article>
+<article class="card incident a"><div class="incident-head"><div class="number">INCIDENT 06 · NOISE</div><h3>В классе шумно</h3></div><div class="incident-body"><p><b>Событие.</b> В записи слышны разговоры других учеников.</p><div class="challenge">На каком этапе возникает проблема и как она повлияет на следующие?</div><textarea></textarea></div></article>
+</div><div class="card" id="randomResult" style="display:none;margin-top:15px;border:2px solid var(--blue)"><div class="tag" style="color:var(--blue)">🎲 Ваша поломка</div><h3 id="randomTitle"></h3><p id="randomText" class="sub"></p></div></section>
+
+<section class="section" id="pitch"><div class="section-head"><div><div class="kicker">07 / Pitch & Debate</div><h2>Защитите решение</h2><p class="sub">2 минуты на команду + вопросы других команд.</p></div></div><div class="grid two"><div class="card"><h3>Структура выступления</h3><div class="pitch-step"><div class="bignum">1</div><div><b>Pipeline</b><div class="small">Что происходит от голоса до ответа?</div></div></div><div class="pitch-step"><div class="bignum">2</div><div><b>Representation</b><div class="small">Как система представляет текст?</div></div></div><div class="pitch-step"><div class="bignum">3</div><div><b>Strength</b><div class="small">В чём сильная сторона подхода?</div></div></div><div class="pitch-step"><div class="bignum">4</div><div><b>Failure</b><div class="small">Где он ломается?</div></div></div><div class="pitch-step"><div class="bignum">5</div><div><b>Upgrade</b><div class="small">Что бы вы добавили следующим?</div></div></div></div><div class="card"><h3>Вопросы для дебатов</h3><ol class="question-list"><li>Всегда ли LLM лучше TF-IDF?</li><li>Можно ли понять смысл, просто считая слова?</li><li>Зачем нужны embeddings, если есть LLM?</li><li>Что опаснее: ошибка ASR или ошибка LLM?</li><li>Нужно ли всегда исправлять code-switching?</li><li>Как проверить, что две фразы действительно похожи по смыслу?</li></ol></div></div><div class="card" style="margin-top:15px"><p class="big-question">Финальный вопрос: какую систему вы бы реально выбрали для школьного голосового помощника и почему?</p><textarea placeholder="Наш выбор → аргумент → главный риск → как проверим"></textarea></div></section>
+
+<section class="section" id="debrief"><div class="section-head"><div><div class="kicker">08 / Debrief</div><h2>Что мы поняли?</h2></div></div><div class="grid two"><div class="card"><h3>От слов к смыслу</h3><textarea placeholder="Чем BoW, TF-IDF, Word2Vec и LLM отличаются друг от друга?"></textarea></div><div class="card"><h3>От звука к тексту</h3><textarea placeholder="Почему ASR и code-switching важны для голосового интерфейса?"></textarea></div><div class="card"><h3>Самая опасная ошибка</h3><textarea placeholder="Какая ошибка сильнее всего влияет на пользователя и почему?"></textarea></div><div class="card"><h3>Одна вещь, которую я теперь могу объяснить</h3><textarea></textarea></div></div></section>
+</main></div>
+<footer class="footer"><b>HEAR · UNDERSTAND · ANSWER</b> · Language & Speech AI Lab<br><span>Принцип занятия: от простого представления слов к смыслу, контексту и современной обработке речи.</span></footer>
+<script>
+function randomIncident(){const cards=[...document.querySelectorAll('.incident')];const chosen=cards[Math.floor(Math.random()*cards.length)];document.getElementById('randomTitle').textContent=chosen.querySelector('h3').textContent;document.getElementById('randomText').textContent=chosen.querySelector('.incident-body p').innerText;const r=document.getElementById('randomResult');r.style.display='block';r.scrollIntoView({behavior:'smooth',block:'center'});}
+function resetFields(){if(!confirm('Очистить все заполненные поля?'))return;document.querySelectorAll('textarea,input[type=text]').forEach(el=>el.value='');document.querySelectorAll('input[type=checkbox]').forEach(el=>el.checked=false);}
+</script></body></html>
